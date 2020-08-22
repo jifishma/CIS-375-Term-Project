@@ -1,0 +1,627 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Hotels">
+          <Key>
+            <PropertyRef Name="hotelID" />
+          </Key>
+          <Property Name="hotelID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="location" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Packages">
+          <Key>
+            <PropertyRef Name="packageID" />
+          </Key>
+          <Property Name="packageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="hotelID" Type="int" Nullable="false" />
+          <Property Name="availability" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="type" Type="int" Nullable="false" />
+          <Property Name="location" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="capacity" Type="int" Nullable="false" />
+          <Property Name="price" Type="float" Nullable="false" />
+          <Property Name="rewards" Type="int" Nullable="false" />
+          <Property Name="timesViewed" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PriceHistory">
+          <Key>
+            <PropertyRef Name="priceID" />
+          </Key>
+          <Property Name="priceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="packageID" Type="int" Nullable="false" />
+          <Property Name="price" Type="int" Nullable="false" />
+          <Property Name="from" Type="date" Nullable="false" />
+          <Property Name="to" Type="date" />
+        </EntityType>
+        <EntityType Name="Reservations">
+          <Key>
+            <PropertyRef Name="reservationID" />
+          </Key>
+          <Property Name="reservationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="createdByUserId" Type="int" Nullable="false" />
+          <Property Name="userID" Type="int" />
+          <Property Name="packageID" Type="int" Nullable="false" />
+          <Property Name="reservationsFrom" Type="datetime" Nullable="false" />
+          <Property Name="reservationsTo" Type="datetime" Nullable="false" />
+          <Property Name="numGuests" Type="int" />
+          <Property Name="isCheckedIn" Type="bit" />
+          <Property Name="isWaitlisted" Type="bit" />
+          <Property Name="packageStatus" Type="int" />
+        </EntityType>
+        <EntityType Name="Transactions">
+          <Key>
+            <PropertyRef Name="transactionID" />
+          </Key>
+          <Property Name="transactionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="reservationID" Type="int" Nullable="false" />
+          <Property Name="paymentMethod" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="amountPaid" Type="float" Nullable="false" />
+          <Property Name="amountRequired" Type="float" Nullable="false" />
+          <Property Name="cardInfo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="pointsApplied" Type="int" Nullable="false" />
+          <Property Name="pointsEarned" Type="int" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isEmployee" Type="bit" Nullable="false" />
+          <Property Name="availableRewards" Type="int" Nullable="false" />
+          <Property Name="pay" Type="float" />
+          <Property Name="numLogins" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ViewHistory">
+          <Key>
+            <PropertyRef Name="viewID" />
+          </Key>
+          <Property Name="viewID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="roomID" Type="int" Nullable="false" />
+          <Property Name="numViews" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Packages_Hotels">
+          <End Role="Hotels" Type="Self.Hotels" Multiplicity="1" />
+          <End Role="Packages" Type="Self.Packages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hotels">
+              <PropertyRef Name="hotelID" />
+            </Principal>
+            <Dependent Role="Packages">
+              <PropertyRef Name="hotelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PriceHistory_Packages">
+          <End Role="Packages" Type="Self.Packages" Multiplicity="1" />
+          <End Role="PriceHistory" Type="Self.PriceHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Packages">
+              <PropertyRef Name="packageID" />
+            </Principal>
+            <Dependent Role="PriceHistory">
+              <PropertyRef Name="packageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PriceHistory_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="PriceHistory" Type="Self.PriceHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="PriceHistory">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Packages">
+          <End Role="Packages" Type="Self.Packages" Multiplicity="1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Packages">
+              <PropertyRef Name="packageID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="packageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Users_CreatedBy">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="createdByUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Users_For">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="Reservations">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transactions_Reservations">
+          <End Role="Reservations" Type="Self.Reservations" Multiplicity="1" />
+          <End Role="Transactions" Type="Self.Transactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reservations">
+              <PropertyRef Name="reservationID" />
+            </Principal>
+            <Dependent Role="Transactions">
+              <PropertyRef Name="reservationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transactions_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Transactions" Type="Self.Transactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="Transactions">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ViewHistory_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ViewHistory" Type="Self.ViewHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="ViewHistory">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DatabaseModelStoreContainer">
+          <EntitySet Name="Hotels" EntityType="Self.Hotels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Packages" EntityType="Self.Packages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PriceHistory" EntityType="Self.PriceHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reservations" EntityType="Self.Reservations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ViewHistory" EntityType="Self.ViewHistory" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Packages_Hotels" Association="Self.FK_Packages_Hotels">
+            <End Role="Hotels" EntitySet="Hotels" />
+            <End Role="Packages" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PriceHistory_Packages" Association="Self.FK_PriceHistory_Packages">
+            <End Role="Packages" EntitySet="Packages" />
+            <End Role="PriceHistory" EntitySet="PriceHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PriceHistory_Users" Association="Self.FK_PriceHistory_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PriceHistory" EntitySet="PriceHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Packages" Association="Self.FK_Reservations_Packages">
+            <End Role="Packages" EntitySet="Packages" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Users_CreatedBy" Association="Self.FK_Reservations_Users_CreatedBy">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Users_For" Association="Self.FK_Reservations_Users_For">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reservations" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transactions_Reservations" Association="Self.FK_Transactions_Reservations">
+            <End Role="Reservations" EntitySet="Reservations" />
+            <End Role="Transactions" EntitySet="Transactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transactions_Users" Association="Self.FK_Transactions_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Transactions" EntitySet="Transactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ViewHistory_Users" Association="Self.FK_ViewHistory_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ViewHistory" EntitySet="ViewHistory" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Hotels" EntityType="DatabaseModel.Hotel" />
+          <EntitySet Name="Packages" EntityType="DatabaseModel.Package" />
+          <EntitySet Name="PriceHistories" EntityType="DatabaseModel.PriceHistory" />
+          <EntitySet Name="Reservations" EntityType="DatabaseModel.Reservation" />
+          <EntitySet Name="Transactions" EntityType="DatabaseModel.Transaction" />
+          <EntitySet Name="Users" EntityType="DatabaseModel.User" />
+          <EntitySet Name="ViewHistories" EntityType="DatabaseModel.ViewHistory" />
+          <AssociationSet Name="FK_Packages_Hotels" Association="DatabaseModel.FK_Packages_Hotels">
+            <End Role="Hotel" EntitySet="Hotels" />
+            <End Role="Package" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PriceHistory_Users" Association="DatabaseModel.FK_PriceHistory_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PriceHistory" EntitySet="PriceHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Users_CreatedBy" Association="DatabaseModel.FK_Reservations_Users_CreatedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Reservation" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Users_For" Association="DatabaseModel.FK_Reservations_Users_For">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Reservation" EntitySet="Reservations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transactions_Reservations" Association="DatabaseModel.FK_Transactions_Reservations">
+            <End Role="Reservation" EntitySet="Reservations" />
+            <End Role="Transaction" EntitySet="Transactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transactions_Users" Association="DatabaseModel.FK_Transactions_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Transaction" EntitySet="Transactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ViewHistory_Users" Association="DatabaseModel.FK_ViewHistory_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ViewHistory" EntitySet="ViewHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PriceHistory_Packages" Association="DatabaseModel.FK_PriceHistory_Packages">
+            <End Role="Package" EntitySet="Packages" />
+            <End Role="PriceHistory" EntitySet="PriceHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservations_Packages" Association="DatabaseModel.FK_Reservations_Packages">
+            <End Role="Package" EntitySet="Packages" />
+            <End Role="Reservation" EntitySet="Reservations" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Hotel">
+          <Key>
+            <PropertyRef Name="hotelID" />
+          </Key>
+          <Property Name="hotelID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="location" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Packages" Relationship="DatabaseModel.FK_Packages_Hotels" FromRole="Hotel" ToRole="Package" />
+        </EntityType>
+        <EntityType Name="Package">
+          <Key>
+            <PropertyRef Name="packageID" />
+          </Key>
+          <Property Name="packageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="hotelID" Type="Int32" Nullable="false" />
+          <Property Name="availability" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="Int32" Nullable="false" />
+          <Property Name="location" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="capacity" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <Property Name="rewards" Type="Int32" Nullable="false" />
+          <Property Name="timesViewed" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Hotel" Relationship="DatabaseModel.FK_Packages_Hotels" FromRole="Package" ToRole="Hotel" />
+          <NavigationProperty Name="PriceHistories" Relationship="DatabaseModel.FK_PriceHistory_Packages" FromRole="Package" ToRole="PriceHistory" />
+          <NavigationProperty Name="Reservations" Relationship="DatabaseModel.FK_Reservations_Packages" FromRole="Package" ToRole="Reservation" />
+        </EntityType>
+        <EntityType Name="PriceHistory">
+          <Key>
+            <PropertyRef Name="priceID" />
+          </Key>
+          <Property Name="priceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Int32" Nullable="false" />
+          <Property Name="from" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="to" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="User" Relationship="DatabaseModel.FK_PriceHistory_Users" FromRole="PriceHistory" ToRole="User" />
+          <Property Name="packageID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Package" Relationship="DatabaseModel.FK_PriceHistory_Packages" FromRole="PriceHistory" ToRole="Package" />
+        </EntityType>
+        <EntityType Name="Reservation">
+          <Key>
+            <PropertyRef Name="reservationID" />
+          </Key>
+          <Property Name="reservationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="createdByUserId" Type="Int32" Nullable="false" />
+          <Property Name="userID" Type="Int32" />
+          <Property Name="reservationsFrom" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="reservationsTo" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="numGuests" Type="Int32" />
+          <Property Name="isCheckedIn" Type="Boolean" />
+          <Property Name="isWaitlisted" Type="Boolean" />
+          <NavigationProperty Name="User" Relationship="DatabaseModel.FK_Reservations_Users_CreatedBy" FromRole="Reservation" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="DatabaseModel.FK_Reservations_Users_For" FromRole="Reservation" ToRole="User" />
+          <NavigationProperty Name="Transactions" Relationship="DatabaseModel.FK_Transactions_Reservations" FromRole="Reservation" ToRole="Transaction" />
+          <Property Name="packageID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Package" Relationship="DatabaseModel.FK_Reservations_Packages" FromRole="Reservation" ToRole="Package" />
+          <Property Name="packageStatus" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="transactionID" />
+          </Key>
+          <Property Name="transactionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="reservationID" Type="Int32" Nullable="false" />
+          <Property Name="paymentMethod" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="amountPaid" Type="Double" Nullable="false" />
+          <Property Name="amountRequired" Type="Double" Nullable="false" />
+          <Property Name="cardInfo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="pointsApplied" Type="Int32" Nullable="false" />
+          <Property Name="pointsEarned" Type="Int32" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Reservation" Relationship="DatabaseModel.FK_Transactions_Reservations" FromRole="Transaction" ToRole="Reservation" />
+          <NavigationProperty Name="User" Relationship="DatabaseModel.FK_Transactions_Users" FromRole="Transaction" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="availableRewards" Type="Int32" Nullable="false" />
+          <Property Name="pay" Type="Double" />
+          <Property Name="numLogins" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PriceHistories" Relationship="DatabaseModel.FK_PriceHistory_Users" FromRole="User" ToRole="PriceHistory" />
+          <NavigationProperty Name="Reservations" Relationship="DatabaseModel.FK_Reservations_Users_CreatedBy" FromRole="User" ToRole="Reservation" />
+          <NavigationProperty Name="Reservations1" Relationship="DatabaseModel.FK_Reservations_Users_For" FromRole="User" ToRole="Reservation" />
+          <NavigationProperty Name="Transactions" Relationship="DatabaseModel.FK_Transactions_Users" FromRole="User" ToRole="Transaction" />
+          <NavigationProperty Name="ViewHistories" Relationship="DatabaseModel.FK_ViewHistory_Users" FromRole="User" ToRole="ViewHistory" />
+          <Property Name="isEmployee" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ViewHistory">
+          <Key>
+            <PropertyRef Name="viewID" />
+          </Key>
+          <Property Name="viewID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="roomID" Type="Int32" Nullable="false" />
+          <Property Name="numViews" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="DatabaseModel.FK_ViewHistory_Users" FromRole="ViewHistory" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Packages_Hotels">
+          <End Type="DatabaseModel.Hotel" Role="Hotel" Multiplicity="1" />
+          <End Type="DatabaseModel.Package" Role="Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hotel">
+              <PropertyRef Name="hotelID" />
+            </Principal>
+            <Dependent Role="Package">
+              <PropertyRef Name="hotelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PriceHistory_Users">
+          <End Type="DatabaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="DatabaseModel.PriceHistory" Role="PriceHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="PriceHistory">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Users_CreatedBy">
+          <End Type="DatabaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="DatabaseModel.Reservation" Role="Reservation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="Reservation">
+              <PropertyRef Name="createdByUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Users_For">
+          <End Type="DatabaseModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="DatabaseModel.Reservation" Role="Reservation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="Reservation">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transactions_Reservations">
+          <End Type="DatabaseModel.Reservation" Role="Reservation" Multiplicity="1" />
+          <End Type="DatabaseModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reservation">
+              <PropertyRef Name="reservationID" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="reservationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transactions_Users">
+          <End Type="DatabaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="DatabaseModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ViewHistory_Users">
+          <End Type="DatabaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="DatabaseModel.ViewHistory" Role="ViewHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="ViewHistory">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PriceHistory_Packages">
+          <End Type="DatabaseModel.Package" Role="Package" Multiplicity="1" />
+          <End Type="DatabaseModel.PriceHistory" Role="PriceHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Package">
+              <PropertyRef Name="packageID" />
+            </Principal>
+            <Dependent Role="PriceHistory">
+              <PropertyRef Name="packageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservations_Packages">
+          <End Type="DatabaseModel.Package" Role="Package" Multiplicity="1" />
+          <End Type="DatabaseModel.Reservation" Role="Reservation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Package">
+              <PropertyRef Name="packageID" />
+            </Principal>
+            <Dependent Role="Reservation">
+              <PropertyRef Name="packageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DatabaseModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Hotels">
+            <EntityTypeMapping TypeName="DatabaseModel.Hotel">
+              <MappingFragment StoreEntitySet="Hotels">
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="hotelID" ColumnName="hotelID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Packages">
+            <EntityTypeMapping TypeName="DatabaseModel.Package">
+              <MappingFragment StoreEntitySet="Packages">
+                <ScalarProperty Name="timesViewed" ColumnName="timesViewed" />
+                <ScalarProperty Name="rewards" ColumnName="rewards" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="capacity" ColumnName="capacity" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="availability" ColumnName="availability" />
+                <ScalarProperty Name="hotelID" ColumnName="hotelID" />
+                <ScalarProperty Name="packageID" ColumnName="packageID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PriceHistories">
+            <EntityTypeMapping TypeName="DatabaseModel.PriceHistory">
+              <MappingFragment StoreEntitySet="PriceHistory">
+                <ScalarProperty Name="packageID" ColumnName="packageID" />
+                <ScalarProperty Name="to" ColumnName="to" />
+                <ScalarProperty Name="from" ColumnName="from" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="priceID" ColumnName="priceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reservations">
+            <EntityTypeMapping TypeName="DatabaseModel.Reservation">
+              <MappingFragment StoreEntitySet="Reservations">
+                <ScalarProperty Name="packageStatus" ColumnName="packageStatus" />
+                <ScalarProperty Name="packageID" ColumnName="packageID" />
+                <ScalarProperty Name="isWaitlisted" ColumnName="isWaitlisted" />
+                <ScalarProperty Name="isCheckedIn" ColumnName="isCheckedIn" />
+                <ScalarProperty Name="numGuests" ColumnName="numGuests" />
+                <ScalarProperty Name="reservationsTo" ColumnName="reservationsTo" />
+                <ScalarProperty Name="reservationsFrom" ColumnName="reservationsFrom" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="createdByUserId" ColumnName="createdByUserId" />
+                <ScalarProperty Name="reservationID" ColumnName="reservationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transactions">
+            <EntityTypeMapping TypeName="DatabaseModel.Transaction">
+              <MappingFragment StoreEntitySet="Transactions">
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="pointsEarned" ColumnName="pointsEarned" />
+                <ScalarProperty Name="pointsApplied" ColumnName="pointsApplied" />
+                <ScalarProperty Name="cardInfo" ColumnName="cardInfo" />
+                <ScalarProperty Name="amountRequired" ColumnName="amountRequired" />
+                <ScalarProperty Name="amountPaid" ColumnName="amountPaid" />
+                <ScalarProperty Name="paymentMethod" ColumnName="paymentMethod" />
+                <ScalarProperty Name="reservationID" ColumnName="reservationID" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="transactionID" ColumnName="transactionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="DatabaseModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="isEmployee" ColumnName="isEmployee" />
+                <ScalarProperty Name="numLogins" ColumnName="numLogins" />
+                <ScalarProperty Name="pay" ColumnName="pay" />
+                <ScalarProperty Name="availableRewards" ColumnName="availableRewards" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ViewHistories">
+            <EntityTypeMapping TypeName="DatabaseModel.ViewHistory">
+              <MappingFragment StoreEntitySet="ViewHistory">
+                <ScalarProperty Name="numViews" ColumnName="numViews" />
+                <ScalarProperty Name="roomID" ColumnName="roomID" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="viewID" ColumnName="viewID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
