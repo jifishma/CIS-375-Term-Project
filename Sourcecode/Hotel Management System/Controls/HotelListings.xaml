@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Hotel_Management_System.Controls.HotelListings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Hotel_Management_System.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <WrapPanel x:Name="WrapPanel_MainControl" Margin="0">
+            <Border Height="100" Width="100" Margin="20" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Label" TextWrapping="WrapWithOverflow" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock Text="Label" TextWrapping="WrapWithOverflow" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="Label" TextWrapping="WrapWithOverflow" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </WrapPanel>
+    </ScrollViewer>
+</UserControl>

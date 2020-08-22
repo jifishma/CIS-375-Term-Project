@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Hotel_Management_System.Controls.CreateUser"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Hotel_Management_System.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel Margin="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="200">
+        <Label x:Name="Label_Add_Result" Content="" Foreground="White" Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Hidden"/>
+        <Label Content="Username" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0,0,0,10"/>
+        <TextBox x:Name="TextBox_Username" Height="23" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20" Background="{x:Null}" Foreground="White" BorderBrush="White" MinWidth="150" HorizontalContentAlignment="Center" KeyUp="TextBox_KeyUp"/>
+        <Label Content="Password" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Padding="0,0,0,10"/>
+        <TextBox x:Name="TextBox_Password" Height="23" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20" Background="{x:Null}" Foreground="White" BorderBrush="White" MinWidth="150" HorizontalContentAlignment="Center" KeyUp="TextBox_KeyUp"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+            <Label Content="Is this an employee?" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            <CheckBox x:Name="CheckBox_IsEmployee" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,0,0,0" Background="White" BorderBrush="White" Foreground="Black" Checked="CheckBox_IsAdmin_Checked" />
+        </StackPanel>
+        <StackPanel x:Name="StackPanel_Pay" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10" Visibility="Collapsed">
+            <Label Foreground="White" Content="Pay? $" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox x:Name="TextBox_Pay" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0" Background="{x:Null}" Foreground="White" BorderBrush="White" MinWidth="50" HorizontalContentAlignment="Center" KeyUp="TextBox_KeyUp" HorizontalAlignment="Center" Height="23" VerticalAlignment="Center" PreviewTextInput="TextBox_Pay_PreviewTextInput"/>
+        </StackPanel>
+        <Button x:Name="Button_Create_User" Content="Create User" VerticalAlignment="Center" Background="{x:Null}" Foreground="White" BorderBrush="White" Padding="5,1" DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="0,10,0,0" Click="createAccount"/>
+    </StackPanel>
+</UserControl>
